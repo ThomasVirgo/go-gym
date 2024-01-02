@@ -11,14 +11,16 @@
 </head>
 
 <body>
+    <div id="alert-container"></div>
 
-    <form class="container mx-auto" hx-post="/exercise" hx-swap="none">
+    <form class="container mx-auto" hx-post="/exercise" hx-swap="innerHTML" hx-target="#exercise-select"
+        hx-on::after-request="this.reset()">
         <input type="text" name="name" placeholder="Exercise Name" class="input input-bordered w-full max-w-xs my-2" />
         <button class="btn btn-info mx-1" type="submit">Add Exercise</button>
     </form>
 
     <form class="container mx-auto py-4" hx-post="/set" hx-swap="none">
-        <select class="select select-bordered w-full max-w-xs" name="exercise">
+        <select class="select select-bordered w-full max-w-xs" name="exercise" id="exercise-select">
             <option disabled selected>Exercise</option>
             {{range .exercises}}
             <option value="{{ .ID }}">{{ .Name }}</option>

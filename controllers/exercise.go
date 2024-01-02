@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"gym/db"
+	"gym/query"
 	"net/http"
 
 	sq "github.com/Masterminds/squirrel"
@@ -41,5 +42,15 @@ func CreateExercise(c *gin.Context) {
 			})
 			return
 		}
+		exercises, err := query.GetAllExercises()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": fmt.Sprintf("%s", err.Error()),
+			})
+			return
+		}
+		c.HTML(http.StatusOK, "exercises.html", gin.H{
+			"exercises": exercises,
+		})
 	}
 }

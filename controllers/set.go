@@ -25,9 +25,6 @@ func CreateSet(c *gin.Context) {
 			})
 			return
 		}
-		fmt.Println(set.Exercise)
-		fmt.Println(set.Weight)
-		fmt.Println(set.Reps)
 		sql, args, err := sq.
 			Insert("sets").Columns("exercise", "weight", "reps").
 			Values(set.Exercise, set.Weight, set.Reps).

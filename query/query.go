@@ -2,6 +2,7 @@ package query
 
 import (
 	"gym/db"
+	"time"
 
 	sq "github.com/Masterminds/squirrel"
 )
@@ -12,9 +13,11 @@ type Exercise struct {
 }
 
 type Set struct {
-	Exercise int     `db:"exercise"`
-	Weight   float32 `db:"weight"`
-	Reps     int     `db:"reps"`
+	ExerciseName       string    `db:"name"`
+	Weight             float32   `db:"weight"`
+	Reps               int       `db:"reps"`
+	CreatedAt          time.Time `db:"created_at"`
+	FormattedCreatedAt string
 }
 
 func GetAllExercises() ([]Exercise, error) {
@@ -39,7 +42,7 @@ func GetAllExercises() ([]Exercise, error) {
 }
 
 func GetAllSets() ([]Set, error) {
-	sql, args, err := sq.Select("exercise", "weight", "reps").From("sets").ToSql()
+	sql, args, err := sq.Select("exercises.name", "weight", "reps", "created_at").From("sets").Join("exercises ON sets.exercise = exercises.id").ToSql()
 	if err != nil {
 		return []Set{}, err
 	}
@@ -50,10 +53,11 @@ func GetAllSets() ([]Set, error) {
 	sets := []Set{}
 	for rows.Next() {
 		set := Set{}
-		err = rows.Scan(&set.Exercise, &set.Weight, &set.Reps)
+		err = rows.Scan(&set.ExerciseName, &set.Weight, &set.Reps, &set.CreatedAt)
 		if err != nil {
 			return []Set{}, err
 		}
+		set.FormattedCreatedAt = set.CreatedAt.Format("2nd Jan")
 		sets = append(sets, set)
 	}
 	return sets, nil

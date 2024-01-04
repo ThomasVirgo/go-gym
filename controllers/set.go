@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"gym/db"
+	"gym/query"
 	"net/http"
 
 	sq "github.com/Masterminds/squirrel"
@@ -42,5 +43,15 @@ func CreateSet(c *gin.Context) {
 			})
 			return
 		}
+		gym_sessions, err := query.GetGymSessions()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		c.HTML(http.StatusCreated, "gym_sessions.html", gin.H{
+			"gym_sessions": gym_sessions,
+		})
 	}
 }

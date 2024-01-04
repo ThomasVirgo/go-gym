@@ -1,0 +1,32 @@
+{{range .gym_sessions}}
+<details class="collapse bg-base-200 my-2">
+    <summary class="collapse-title text-xl font-medium">{{.DateString}}</summary>
+    <div class="collapse-content">
+        {{range $exercise, $sets := .Exercises}}
+        <div class="container my-5">
+            <h3 class="font-small">{{$exercise}}</h3>
+            <div class="overflow-x-auto">
+                <table class="table table-md">
+                    <thead>
+                        <tr>
+                            <th>Set</th>
+                            <th>Weight</th>
+                            <th>Reps</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range $index, $set := $sets}}
+                        <tr>
+                            <td>{{$index}}</td>
+                            <td>{{ $set.Weight }}</td>
+                            <td>{{ $set.Reps }}</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {{end}}
+    </div>
+</details>
+{{end}}
